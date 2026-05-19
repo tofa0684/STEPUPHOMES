@@ -52,7 +52,10 @@ export default function ListingsManager() {
   };
 
   const handleSave = async (propertyData: any) => {
-    await saveProperty(propertyData);
+    const res = await saveProperty(propertyData);
+    if (res && !res.success) {
+      throw new Error(res.error);
+    }
     await fetchProperties();
   };
 

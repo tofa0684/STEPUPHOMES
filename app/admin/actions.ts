@@ -45,49 +45,55 @@ export async function getProperties() {
 }
 
 export async function saveProperty(propertyData: any) {
-  const supabase = (await createClient()) as any;
-  const { id } = propertyData;
+  try {
+    const supabase = (await createClient()) as any;
+    const { id } = propertyData;
 
-  // Clean numbers to prevent database cast/type crashes
-  const cleanPrice = Number(String(propertyData.price || 0).replace(/[^0-9.]/g, ''));
-  const cleanSqft = Number(String(propertyData.sqft || propertyData.square_footage || 0).replace(/[^0-9.]/g, ''));
-  const cleanBeds = Number(propertyData.beds || 0);
-  const cleanBaths = Number(propertyData.baths || 0);
+    // Clean numbers to prevent database cast/type crashes
+    const cleanPrice = Number(String(propertyData.price || 0).replace(/[^0-9.]/g, ''));
+    const cleanSqft = Number(String(propertyData.sqft || propertyData.square_footage || 0).replace(/[^0-9.]/g, ''));
+    const cleanBeds = Number(propertyData.beds || 0);
+    const cleanBaths = Number(propertyData.baths || 0);
 
-  const payload: any = {
-    title: propertyData.title || '',
-    location: propertyData.location || '',
-    price: cleanPrice,
-    property_tag: propertyData.property_tag || propertyData.tag || '',
-    beds: cleanBeds,
-    baths: cleanBaths,
-    image_url: propertyData.image_url || propertyData.image || '',
-    description: propertyData.description || '',
-    sqft: cleanSqft,
-    image: propertyData.image || propertyData.image_url || '',
-  };
+    const payload: any = {
+      title: propertyData.title || '',
+      location: propertyData.location || '',
+      price: cleanPrice,
+      property_tag: propertyData.property_tag || propertyData.tag || '',
+      beds: cleanBeds,
+      baths: cleanBaths,
+      image_url: propertyData.image_url || propertyData.image || '',
+      description: propertyData.description || '',
+      sqft: cleanSqft,
+      image: propertyData.image || propertyData.image_url || '',
+    };
 
-  if (propertyData.created_at) {
-    payload.created_at = propertyData.created_at;
+    if (propertyData.created_at) {
+      payload.created_at = propertyData.created_at;
+    }
+
+    if (id) {
+      // Update
+      const { error } = await supabase
+        .from('properties')
+        .update(payload)
+        .eq('id', id);
+      if (error) throw new Error(error.message);
+    } else {
+      // Insert
+      const { error } = await supabase
+        .from('properties')
+        .insert(payload);
+      if (error) throw new Error(error.message);
+    }
+
+    revalidatePath('/admin/listings');
+    revalidatePath('/');
+    return { success: true };
+  } catch (err: any) {
+    console.error('saveProperty Error:', err);
+    return { success: false, error: err?.message || 'Failed to save property' };
   }
-
-  if (id) {
-    // Update
-    const { error } = await supabase
-      .from('properties')
-      .update(payload)
-      .eq('id', id);
-    if (error) throw new Error(error.message);
-  } else {
-    // Insert
-    const { error } = await supabase
-      .from('properties')
-      .insert(payload);
-    if (error) throw new Error(error.message);
-  }
-
-  revalidatePath('/admin/listings');
-  revalidatePath('/');
 }
 
 export async function deleteProperty(id: string) {
