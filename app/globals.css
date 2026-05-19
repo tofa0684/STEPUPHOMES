@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: auto !important;
+}
+.colorize-on-hover {
+  filter: grayscale(100%);
+  transition: filter 0.5s ease;
+  cursor: pointer;
+}
+
+.colorize-on-hover:hover,
+.colorize-on-hover:focus,
+.colorize-on-hover.touched {
+  filter: grayscale(0%);
+}
+
+/* Default state — desaturated and slightly cool */
+.about-photo-wrapper img {
+  filter: grayscale(100%) brightness(0.85);
+  transition: filter 0.7s ease, transform 0.7s ease;
+  display: block;
+  width: 100%;
+}
+
+/* Hover state — full natural color, corrected for warm cast */
+.about-photo-wrapper:hover img {
+  filter: grayscale(0%) brightness(1.05) saturate(1.3) hue-rotate(10deg);
+  transform: scale(1.03);
+}

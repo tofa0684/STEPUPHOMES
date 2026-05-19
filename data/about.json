@@ -1,0 +1,16 @@
+{
+  "name": "Tekle Yohannes",
+  "title": "Your Trusted Partner.",
+  "subtitle": "About The Agent",
+  "paragraphs": [
+    "As a premier luxury real estate advisor in Ethiopia, I specialize in curating bespoke property portfolios for high-net-worth individuals, investors, and families seeking unparalleled living experiences.",
+    "My approach is rooted in discretion, market intelligence, and an unwavering commitment to my clients' success. Whether you are acquiring a waterfront mansion, a penthouse in the sky, or a high-yield commercial asset, I provide end-to-end advisory services tailored to your exact specifications.",
+    "With deep connections across Ethiopia and a rigorous understanding of market dynamics, I secure not just properties, but generational assets."
+  ],
+  "stats": [
+    { "label": "Years Experience", "value": "4+" },
+    { "label": "Happy Clients", "value": "73+" }
+  ],
+  "signature": "Tekle Yohannes",
+  "experience_years": "4+"
+}
