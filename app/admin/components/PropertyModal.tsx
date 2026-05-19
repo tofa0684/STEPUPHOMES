@@ -89,9 +89,9 @@ export default function PropertyModal({ isOpen, onClose, onSave, property }: Pro
         image,
       });
       onClose();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to save property.');
+      alert(`Failed to save property: ${err?.message || err || 'Unknown error'}`);
     } finally {
       setSaving(false);
     }
